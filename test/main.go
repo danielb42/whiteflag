@@ -12,19 +12,19 @@ func main() {
 
 	wf.ParseCommandLine()
 
-	if wf.CheckBool("b") && wf.GetBool("bool") {
-		fmt.Println("bool set")
+	if wf.CheckBool("b") {
+		fmt.Println("bool =", wf.GetBool("b"))
 	}
 
 	if wf.CheckInt("int") {
 		fmt.Println("integer =", wf.GetInt("int"))
 	}
 
-	if wf.CheckString("notint") {
-		wf.GetInt("notint")
-	}
-
 	if wf.CheckString("string") {
 		fmt.Println("string =", wf.GetString("string"))
+	}
+
+	if wf.CheckString("notint") {
+		wf.GetInt("notint")
 	}
 }

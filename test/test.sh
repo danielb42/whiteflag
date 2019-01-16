@@ -13,20 +13,20 @@ function check {
 ./test.bin 
 check "no flags"
 
-./test.bin -b | grep -q "bool set"
+./test.bin -b | grep -q "bool = true"
 check "bool set"
-
-./test.bin --bool | grep -q "bool set"
-check "long flag correctly resolved"
 
 ./test.bin --int 42 | grep -q "integer = 42"
 check "integer = 42"
 
-./test.bin --notint foobar | grep -q "integer flag --notint missing or no integer value given"
-check "type mismatch recognized"
-
 ./test.bin --string foobar | grep -q "string = foobar"
 check "string = foobar"
+
+./test.bin --bool | grep -q "bool = true"
+check "long flag correctly resolved"
+
+./test.bin --notint foobar | grep -q "integer flag --notint missing or no integer value given"
+check "type mismatch recognized"
 
 ./test.bin --help | egrep "Usage|bool|Another" | wc -l | grep -q 3
 check "usage text looks complete"
