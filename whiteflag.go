@@ -162,11 +162,11 @@ func guessType(flag string) string {
 	msg := ". did you mean the "
 
 	if CheckBool(flag) {
-		return msg + "boolean " + hyphenate(flag)
+		return msg + "boolean flag " + hyphenate(flag) + "?"
 	} else if CheckInt(flag) {
-		return msg + "integer " + hyphenate(flag)
+		return msg + "integer flag " + hyphenate(flag) + "?"
 	} else if CheckString(flag) {
-		return msg + "string " + hyphenate(flag)
+		return msg + "string flag " + hyphenate(flag) + "?"
 	}
 
 	return ""
@@ -185,7 +185,7 @@ func isFlag(token string) bool {
 }
 
 func panic(reason string) {
-	println(reason)
+	fmt.Println(reason)
 	os.Exit(1)
 }
 
