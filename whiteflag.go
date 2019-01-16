@@ -20,7 +20,7 @@ var (
 // to the short version. Also, a description for these flags can be specified which
 // will be shown in --help/-h output. Aliasing must happen before calling ParseCommandLine().
 func Alias(short, long, description string) {
-	if unalias(long) != long {
+	if resolve(long) != long {
 		panic(hyphenate(long) + " is already aliased to another flag")
 	}
 
@@ -31,14 +31,14 @@ func Alias(short, long, description string) {
 	aliases[short] = flagAliasing{long, description}
 }
 
-func unalias(flag string) string {
+func resolve(long string) string {
 	for short, flagDesc := range aliases {
-		if flag == flagDesc.long {
+		if long == flagDesc.long {
 			return short
 		}
 	}
 
-	return flag
+	return long
 }
 
 // ParseCommandLine scans the command line for supplied flags
@@ -86,12 +86,12 @@ func ParseCommandLine() {
 
 		switch value.(type) {
 		case bool:
-			flags["bool"][unalias(flag)] = true
+			flags["bool"][resolve(flag)] = true
 		case string:
 			if intVal, err := strconv.Atoi(value.(string)); err == nil {
-				flags["int"][unalias(flag)] = intVal
+				flags["int"][resolve(flag)] = intVal
 			} else {
-				flags["string"][unalias(flag)] = value.(string)
+				flags["string"][resolve(flag)] = value.(string)
 			}
 		}
 	}
@@ -99,21 +99,21 @@ func ParseCommandLine() {
 
 // CheckBool returns true when flag is present on the command line.
 func CheckBool(flag string) bool {
-	_, present := flags["bool"][unalias(flag)]
+	_, present := flags["bool"][resolve(flag)]
 	return present
 }
 
 // CheckInt returns true when flag is present on the command line and
 // is followed by an integer value.
 func CheckInt(flag string) bool {
-	_, present := flags["int"][unalias(flag)]
+	_, present := flags["int"][resolve(flag)]
 	return present
 }
 
 // CheckString returns true when flag is present on the command line and
 // is followed by a string value.
 func CheckString(flag string) bool {
-	_, present := flags["string"][unalias(flag)]
+	_, present := flags["string"][resolve(flag)]
 	return present
 }
 
@@ -133,13 +133,13 @@ func GetInt(flag string) int {
 		panic("flag " + hyphenate(flag) + " missing or no integer value given" + guessType(flag))
 	}
 
-	return flags["int"][unalias(flag)].(int)
+	return flags["int"][resolve(flag)].(int)
 }
 
 // GetString fetches the value of a string flag, panics if
 // flag is missing or no string value is specified.
 func GetString(flag string) string {
-	flag = unalias(flag)
+	flag = resolve(flag)
 
 	if !CheckString(flag) {
 		panic("flag " + hyphenate(flag) + " missing or no string value given" + guessType(flag))
