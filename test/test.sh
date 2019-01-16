@@ -10,28 +10,26 @@ function check {
   fi
 }
 
-function checkFail {
-  [[ "$?" == "0" ]] && false || true
-  check "$@"
-}
-
 ./test.bin 
 check "no flags"
 
-./test.bin -s
-check "short bool set"
+./test.bin -b | grep -q "bool set"
+check "bool set"
 
-./test.bin --short
-check "long bool set"
+./test.bin --bool | grep -q "bool set"
+check "long flag correctly resolved"
 
-./test.bin --long 42
-check "long int = 42"
+./test.bin --int 42 | grep -q "integer = 42"
+check "integer = 42"
 
-./test.bin --notint foobar
-checkFail "foobar is not an int"
+./test.bin --notint foobar | grep -q "flag --notint missing or no integer value given. did you mean the string flag --notint?"
+check "type mismatch recognized and correct type guessed"
 
-./test.bin --long foobar
-check "long string = foobar"
+./test.bin --string foobar | grep -q "string = foobar"
+check "string = foobar"
+
+./test.bin --help | egrep "Usage|bool|Another" | wc -l | grep -q 3
+check "usage text looks complete"
 
 echo "============="
 echo "OK: all tests"
