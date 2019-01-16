@@ -1,0 +1,29 @@
+image: golang:1.11-alpine
+
+variables:
+  PKG: github.com/danielb42/whiteflag
+
+stages:
+  - build
+  - test
+
+Build:
+  stage: build
+  before_script:
+    - mkdir -p /go/src/$(dirname $PKG)
+    - ln -s $CI_PROJECT_DIR /go/src/${PKG}
+  script:
+    - go build -o test/test.bin ${PKG}/test
+  artifacts:
+    paths:
+    - test/
+    expire_in: 10 minutes
+
+Test:
+  stage: test
+  before_script:
+    - apk update
+    - apk add bash
+  script:
+    - cd test
+    - ./test.sh
