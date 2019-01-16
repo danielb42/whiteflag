@@ -22,8 +22,8 @@ check "long flag correctly resolved"
 ./test.bin --int 42 | grep -q "integer = 42"
 check "integer = 42"
 
-./test.bin --notint foobar | grep -q "flag --notint missing or no integer value given. did you mean the string flag --notint?"
-check "type mismatch recognized and correct type guessed"
+./test.bin --notint foobar | grep -q "integer flag --notint missing or no integer value given"
+check "type mismatch recognized"
 
 ./test.bin --string foobar | grep -q "string = foobar"
 check "string = foobar"

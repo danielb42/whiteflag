@@ -120,7 +120,7 @@ func CheckString(flag string) bool {
 // GetBool is equivalent to CheckBool() but panics when flag is not set.
 func GetBool(flag string) bool {
 	if !CheckBool(flag) {
-		panic("flag " + hyphenate(flag) + " missing or no boolean value given" + guessType(flag))
+		panic("boolean flag " + hyphenate(flag) + " missing or no boolean value given")
 	}
 
 	return true
@@ -130,7 +130,7 @@ func GetBool(flag string) bool {
 // flag is missing or no integer value is specified.
 func GetInt(flag string) int {
 	if !CheckInt(flag) {
-		panic("flag " + hyphenate(flag) + " missing or no integer value given" + guessType(flag))
+		panic("integer flag " + hyphenate(flag) + " missing or no integer value given")
 	}
 
 	return flags["int"][resolve(flag)].(int)
@@ -139,13 +139,11 @@ func GetInt(flag string) int {
 // GetString fetches the value of a string flag, panics if
 // flag is missing or no string value is specified.
 func GetString(flag string) string {
-	flag = resolve(flag)
-
 	if !CheckString(flag) {
-		panic("flag " + hyphenate(flag) + " missing or no string value given" + guessType(flag))
+		panic("string flag " + hyphenate(flag) + " missing or no string value given")
 	}
 
-	return flags["string"][flag].(string)
+	return flags["string"][resolve(flag)].(string)
 }
 
 func hyphenate(flag string) string {
@@ -156,20 +154,6 @@ func hyphenate(flag string) string {
 	}
 
 	return "--" + flag
-}
-
-func guessType(flag string) string {
-	msg := ". did you mean the "
-
-	if CheckBool(flag) {
-		return msg + "boolean flag " + hyphenate(flag) + "?"
-	} else if CheckInt(flag) {
-		return msg + "integer flag " + hyphenate(flag) + "?"
-	} else if CheckString(flag) {
-		return msg + "string flag " + hyphenate(flag) + "?"
-	}
-
-	return ""
 }
 
 func isLongFlag(token string) bool {
