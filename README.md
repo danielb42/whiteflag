@@ -1,6 +1,6 @@
 # whiteflag
 
-[![pipeline status](https://gitlab.com/danielb42/whiteflag/badges/master/pipeline.svg)](https://gitlab.com/danielb42/whiteflag/commits/master)
+[![Build Status](https://travis-ci.com/danielb42/whiteflag.svg?branch=master)](https://travis-ci.com/danielb42/whiteflag)
 [![GoDoc](https://godoc.org/github.com/danielb42/whiteflag?status.svg)](https://godoc.org/github.com/danielb42/whiteflag) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/danielb42/whiteflag)](https://goreportcard.com/report/github.com/danielb42/whiteflag) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
