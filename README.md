@@ -12,7 +12,7 @@ A minimal but sane flag-package for people who just need some CLI flags in Golan
 - provides a `Check` and a `Get` method for Boolean, Integer and String type flags  
 These can be utilized directly without further setup of each flag. 
 - allows you to distinguish between absent and zero-valued flags
-- `-h/--help` prints basic Usage/Help text (see [example](#with-long-flags))
+- `-h/--help` prints basic generated Usage/Help text (see [example](#with-long-flags))
 
 ## What it does not
 whiteflag just doesn't try to be overly smart or versatile. For instance, if you need to define "required" flags or default values for absent flags, just use a few well-placed Get/Check calls yourself.
@@ -30,13 +30,14 @@ import wf "github.com/danielb42/whiteflag"
 func main() {
     wf.ParseCommandLine()
     
+    // always check before accessing
     if wf.CheckString("p") {
         println(wf.GetString("p"))
     }
 }
 ```
 
-### With long flags
+### With long flags and Usage output
 The next snippet will print the sum of two integers given through `-x` and `-y`.  
 Let's also associate long flags to the short flags so we could equivalently run the snippet with `--first` and `--second`.  
 Aliasing flags makes them known to the Usage/Help text generation.
