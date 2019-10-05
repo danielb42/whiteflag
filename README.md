@@ -33,10 +33,10 @@ func main() {
 }
 ```
 
-### With long flags and Usage output
+### With long, required flags and 'Usage' output
 The next snippet will print the sum of two integers given through `-x` and `-y`.  
-**Aliasing flags makes them known to the Usage/Help text generation.**  
 Let's also associate long flags to the short flags so we could equivalently run the snippet with `--first` and `--second`.  
+**Aliasing flags makes them known to the Usage/Help text generation.**  
 
 ```golang
 package main

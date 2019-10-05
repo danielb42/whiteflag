@@ -54,11 +54,12 @@ func main() {
 	//
 	if !wf.CheckInt("missing") {
 		println("integer flag --missing is not present on command line")
-	} else if wf.GetInt("missing") == 0 {
-		println("--missing has value 0")
-	} else {
-		println("--missing has value", wf.GetInt("missing"))
 	}
+
+	if wf.CheckInt("missing") && wf.GetInt("missing") == 0 {
+		println("--missing has value 0")
+	}
+	//
 	// Note: Specifying --missing with an other-than-int value will consume --missing as a
 	// flag of that other type, thus CheckInt("missing") will still return false (not present).
 	// Same for specifying --missing alone, which would result in it being a bool flag.
