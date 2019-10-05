@@ -6,10 +6,9 @@ import (
 
 func main() {
 
-	// optional - associate long flags with short flags and supply a description which
-	// will be shown in -h/--help output.
+	// optional - associate long flags with short flags and supply
+	// a description which will be shown in -h/--help output.
 	//
-	// ! if a long flag has been aliased to the short flag, both can be queried equally
 	// ! aliasing must happen before calling ParseCommandLine()
 	//
 	wf.Alias("b", "mybool", "This is a flag.")
@@ -27,10 +26,12 @@ func main() {
 		println("The bool flag is set")
 	}
 
-	// check if -s or --mystring (as aliased above) is present and is followed by
-	// a string value. if so, print the given string value.
+	// check if -s or --mystring (as aliased above) is present and is
+	// followed by a string value. if so, print the given string value.
 	//
-	// ! we CheckString() first as GetString() on an absent value would trigger a panic
+	// ! we CheckString() first as GetString() on an absent value would
+	// ! trigger a panic (thus making it a required flag)
+	//
 	//
 	if wf.CheckString("mystring") {
 		println(wf.GetString("mystring"))
@@ -38,7 +39,8 @@ func main() {
 
 	// if -x and -y are present and are followed by integer values, add their values.
 	//
-	// ! we CheckInt() first as GetInt() on an absent value would trigger a panic
+	// ! we CheckInt() first as GetInt() on an absent value would
+	// ! trigger a panic (thus making it a required flag)
 	//
 	if wf.CheckInt("x") && wf.CheckInt("y") {
 		x := wf.GetInt("x")
@@ -58,7 +60,7 @@ func main() {
 		println("--missing has value", wf.GetInt("missing"))
 	}
 	// Note: Specifying --missing with an other-than-int value will consume --missing as a
-	// flag of that other type, thus CheckInt("missing") will still return false.
+	// flag of that other type, thus CheckInt("missing") will still return false (not present).
 	// Same for specifying --missing alone, which would result in it being a bool flag.
 
 }
