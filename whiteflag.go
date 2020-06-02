@@ -20,12 +20,24 @@ var (
 // to the short version. Also, a description for these flags can be specified which
 // will be shown in --help/-h output. Aliasing must happen before calling ParseCommandLine().
 func Alias(short, long, description string) {
+	if short == "h" || long == "help" {
+		friendlyPanic("cannot re-define -h or --help")
+	}
+
+	if len(short) > 1 {
+		friendlyPanic("short flag aliased to --" + long + " must not be longer than 1 char")
+	}
+
+	if len(long) < 2 {
+		friendlyPanic("long flag aliased to -" + short + " must be longer that 1 char")
+	}
+
 	if resolve(long) != long {
-		panic(hyphenate(long) + " is already aliased to another flag")
+		friendlyPanic(hyphenate(long) + " is already aliased to another flag")
 	}
 
 	if _, ok := aliases[short]; ok {
-		panic(hyphenate(short) + " already has an associated long flag")
+		friendlyPanic(hyphenate(short) + " already has an associated long flag")
 	}
 
 	aliases[short] = flagAliasing{long, description}
@@ -81,7 +93,7 @@ func ParseCommandLine() {
 		}
 
 		if CheckBool(flag) || CheckInt(flag) || CheckString(flag) {
-			panic(hyphenate(flag) + " specified more than once")
+			friendlyPanic(hyphenate(flag) + " specified more than once")
 		}
 
 		switch value.(type) {
@@ -120,7 +132,7 @@ func CheckString(flag string) bool {
 // GetBool is equivalent to CheckBool() but panics when flag is not set.
 func GetBool(flag string) bool {
 	if !CheckBool(flag) {
-		panic("boolean flag " + hyphenate(flag) + " missing or no boolean value given")
+		friendlyPanic("boolean flag " + hyphenate(flag) + " missing or no boolean value given")
 	}
 
 	return true
@@ -130,7 +142,7 @@ func GetBool(flag string) bool {
 // flag is missing or no integer value is specified.
 func GetInt(flag string) int {
 	if !CheckInt(flag) {
-		panic("integer flag " + hyphenate(flag) + " missing or no integer value given")
+		friendlyPanic("integer flag " + hyphenate(flag) + " missing or no integer value given")
 	}
 
 	return flags["int"][resolve(flag)].(int)
@@ -140,7 +152,7 @@ func GetInt(flag string) int {
 // flag is missing or no string value is specified.
 func GetString(flag string) string {
 	if !CheckString(flag) {
-		panic("string flag " + hyphenate(flag) + " missing or no string value given")
+		friendlyPanic("string flag " + hyphenate(flag) + " missing or no string value given")
 	}
 
 	return flags["string"][resolve(flag)].(string)
@@ -168,13 +180,13 @@ func isFlag(token string) bool {
 	return isLongFlag(token) || isShortFlag(token)
 }
 
-func panic(reason string) {
+func friendlyPanic(reason string) {
 	fmt.Println(reason)
 	os.Exit(1)
 }
 
 func printUsage() {
-	fmt.Printf("Usage: ./%s <flags>\n\nFlags:\n", os.Args[0])
+	fmt.Printf("Usage: %s <flags>\n\nFlags:\n", os.Args[0])
 
 	for short, flagDesc := range aliases {
 		fmt.Printf("  %s  %s\t\t%s\n", hyphenate(short), hyphenate(flagDesc.long), flagDesc.description)
