@@ -29,7 +29,7 @@ func Alias(short, long, description string) {
 	}
 
 	if len(long) < 2 {
-		friendlyPanic("long flag aliased to -" + short + " must be longer that 1 char")
+		friendlyPanic("long flag aliased to -" + short + " must be longer than 1 char")
 	}
 
 	if resolve(long) != long {
