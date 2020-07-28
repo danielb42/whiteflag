@@ -12,13 +12,21 @@ type flagAliasing struct {
 }
 
 var (
-	flags   = make(map[string]map[string]interface{})
-	aliases = make(map[string]flagAliasing)
+	cliAlreadyParsed bool
+	flags            = make(map[string]map[string]interface{})
+	aliases          = make(map[string]flagAliasing)
 )
 
-// Alias associates a long flag with a given short flag which functions identically
-// to the short version. Also, a description for these flags can be specified which
-// will be shown in --help/-h output. Aliasing must happen before calling ParseCommandLine().
+func init() {
+	flags["bool"] = make(map[string]interface{})
+	flags["int"] = make(map[string]interface{})
+	flags["string"] = make(map[string]interface{})
+
+	aliases["h"] = flagAliasing{"help", "show this help text"}
+}
+
+// Alias associates one long flag with one short flag. Also, a description for that flag pair can be specified which
+// will be included in --help/-h output. All aliases must be declared before any Check or Get function is called.
 func Alias(short, long, description string) {
 	if short == "h" || long == "help" {
 		friendlyPanic("cannot re-define -h or --help")
@@ -53,13 +61,15 @@ func resolve(long string) string {
 	return long
 }
 
-// ParseCommandLine scans the command line for supplied flags
-// and builds the internal structures to Check/Get from. Must
-// be called before any Check/Get.
-func ParseCommandLine() {
-	flags["bool"] = make(map[string]interface{})
-	flags["int"] = make(map[string]interface{})
-	flags["string"] = make(map[string]interface{})
+// ParseCommandLine is a no-op and only kept for backward compatibility.
+func ParseCommandLine() {}
+
+func parseCommandLine() {
+	if cliAlreadyParsed {
+		return
+	} else {
+		cliAlreadyParsed = true
+	}
 
 	var (
 		flag  string
@@ -96,14 +106,14 @@ func ParseCommandLine() {
 			friendlyPanic(hyphenate(flag) + " specified more than once")
 		}
 
-		switch value.(type) {
+		switch v := value.(type) {
 		case bool:
 			flags["bool"][resolve(flag)] = true
 		case string:
-			if intVal, err := strconv.Atoi(value.(string)); err == nil {
+			if intVal, err := strconv.Atoi(v); err == nil {
 				flags["int"][resolve(flag)] = intVal
 			} else {
-				flags["string"][resolve(flag)] = value.(string)
+				flags["string"][resolve(flag)] = v
 			}
 		}
 	}
@@ -111,6 +121,7 @@ func ParseCommandLine() {
 
 // CheckBool returns true when flag is present on the command line.
 func CheckBool(flag string) bool {
+	parseCommandLine()
 	_, present := flags["bool"][resolve(flag)]
 	return present
 }
@@ -118,6 +129,7 @@ func CheckBool(flag string) bool {
 // CheckInt returns true when flag is present on the command line and
 // is followed by an integer value.
 func CheckInt(flag string) bool {
+	parseCommandLine()
 	_, present := flags["int"][resolve(flag)]
 	return present
 }
@@ -125,12 +137,15 @@ func CheckInt(flag string) bool {
 // CheckString returns true when flag is present on the command line and
 // is followed by a string value.
 func CheckString(flag string) bool {
+	parseCommandLine()
 	_, present := flags["string"][resolve(flag)]
 	return present
 }
 
 // GetBool is equivalent to CheckBool() but panics when flag is not set.
 func GetBool(flag string) bool {
+	parseCommandLine()
+
 	if !CheckBool(flag) {
 		friendlyPanic("boolean flag " + hyphenate(flag) + " missing or no boolean value given")
 	}
@@ -141,6 +156,8 @@ func GetBool(flag string) bool {
 // GetInt fetches the value of an integer flag, panics if
 // flag is missing or no integer value is specified.
 func GetInt(flag string) int {
+	parseCommandLine()
+
 	if !CheckInt(flag) {
 		friendlyPanic("integer flag " + hyphenate(flag) + " missing or no integer value given")
 	}
@@ -151,6 +168,8 @@ func GetInt(flag string) int {
 // GetString fetches the value of a string flag, panics if
 // flag is missing or no string value is specified.
 func GetString(flag string) string {
+	parseCommandLine()
+
 	if !CheckString(flag) {
 		friendlyPanic("string flag " + hyphenate(flag) + " missing or no string value given")
 	}

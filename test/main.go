@@ -10,8 +10,6 @@ func main() {
 	wf.Alias("b", "bool", "An alias.")
 	wf.Alias("c", "cflag", "Another alias.")
 
-	wf.ParseCommandLine()
-
 	if wf.CheckBool("b") {
 		fmt.Println("bool =", wf.GetBool("b"))
 	}
