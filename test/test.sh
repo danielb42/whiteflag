@@ -23,13 +23,46 @@ check "integer = 42"
 check "string = foobar"
 
 ./test.bin --bool | grep -q "bool = true"
-check "long flag correctly resolved"
+check "long flag correctly resolved (1)"
+
+./test.bin --cflag 42 | grep -q "cflag = 42"
+check "long flag correctly resolved (2)"
 
 ./test.bin --notint foobar | grep -q "integer flag --notint missing or no integer value given"
-check "type mismatch recognized"
+check "type mismatch recognized (1)"
+
+./test.bin --notstring | grep -q "string flag --notstring missing or no string value given"
+check "type mismatch recognized (2)"
+
+./test.bin --notbool 42 | grep -q "boolean flag --notbool missing or no boolean value given"
+check "type mismatch recognized (3)"
 
 ./test.bin --help | egrep "Usage|bool|Another" | wc -l | grep -q 3
 check "usage text looks complete"
+
+./test.bin -a -b -a | grep -q "\-a specified more than once"
+check "duplicate short flags recognized"
+
+./test.bin --foobar -a --foobar | grep -q "\--foobar specified more than once"
+check "duplicate long flags recognized"
+
+./test.bin --testredefineh | grep -q "cannot re-define"
+check "re-defining -h prevented"
+
+./test.bin --testredefinehelp | grep -q "cannot re-define"
+check "re-defining -help prevented"
+
+./test.bin --testshorttoolong | grep -q "must not be longer than 1 char"
+check "short name too long"
+
+./test.bin --testlongtooshort | grep -q "must be longer than 1 char"
+check "long name too short"
+
+./test.bin --testlongalreadyaliased | grep -q "already aliased to another flag"
+check "long flag already aliased"
+
+./test.bin --testshortalreadyaliased | grep -q "already has an associated long flag"
+check "short flag already aliased"
 
 echo "============="
 echo "OK: all tests"
