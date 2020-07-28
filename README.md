@@ -25,8 +25,6 @@ package main
 import wf "github.com/danielb42/whiteflag"
 
 func main() {
-    wf.ParseCommandLine()
-    
     if wf.CheckString("p") {
         println(wf.GetString("p"))
     }
@@ -46,8 +44,6 @@ import wf "github.com/danielb42/whiteflag"
 func main() {
     wf.Alias("x", "first",  "The first number.")
     wf.Alias("y", "second", "The second number.")
-
-    wf.ParseCommandLine()
 
     // we don't CheckInt() for x und y before Get'ting them so 
     // the program will exit if not both flags are specified,

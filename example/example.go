@@ -7,18 +7,12 @@ import (
 func main() {
 
 	// optional - associate long flags with short flags and supply
-	// a description which will be shown in -h/--help output.
+	// a description which will be included in -h/--help output.
 	//
-	// ! aliasing must happen before calling ParseCommandLine()
+	// ! aliasing must happen before calling any Get or Check function
 	//
 	wf.Alias("b", "mybool", "This is a flag.")
 	wf.Alias("s", "mystring", "A string to print.")
-
-	// mandatory - build up the internal structures to Check/Get from.
-	//
-	// ! must happen before any Get/Check call.
-	//
-	wf.ParseCommandLine()
 
 	// check if a boolean flag -b or --mybool (as aliased above) is specified (=true).
 	//
@@ -32,14 +26,13 @@ func main() {
 	// ! we CheckString() first as GetString() on an absent value would
 	// ! trigger a panic (thus making it a required flag)
 	//
-	//
 	if wf.CheckString("mystring") {
 		println(wf.GetString("mystring"))
 	}
 
 	// if -x and -y are present and are followed by integer values, add their values.
 	//
-	// ! we CheckInt() first as GetInt() on an absent value would
+	// ! again, we CheckInt() first as GetInt() on an absent value would
 	// ! trigger a panic (thus making it a required flag)
 	//
 	if wf.CheckInt("x") && wf.CheckInt("y") {
