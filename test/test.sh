@@ -34,9 +34,6 @@ check "type mismatch recognized (1)"
 ./test.bin --notstring | grep -q "string flag --notstring missing or no string value given"
 check "type mismatch recognized (2)"
 
-./test.bin --notbool 42 | grep -q "boolean flag --notbool missing or no boolean value given"
-check "type mismatch recognized (3)"
-
 ./test.bin --help | egrep "Usage|bool|Another" | wc -l | grep -q 3
 check "usage text looks complete"
 

@@ -34,10 +34,6 @@ func main() {
 		wf.GetString("notstring")
 	}
 
-	if wf.CheckInt("notbool") {
-		wf.GetBool("notbool")
-	}
-
 	if wf.CheckBool("testredefineh") {
 		wf.Alias("h", "x", "y")
 	}

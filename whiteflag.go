@@ -142,15 +142,9 @@ func CheckString(flag string) bool {
 	return present
 }
 
-// GetBool is equivalent to CheckBool() but panics when flag is not set.
+// GetBool is equivalent to CheckBool()
 func GetBool(flag string) bool {
-	parseCommandLine()
-
-	if !CheckBool(flag) {
-		friendlyPanic("boolean flag " + hyphenate(flag) + " missing or no boolean value given")
-	}
-
-	return true
+	return CheckBool(flag)
 }
 
 // GetInt fetches the value of an integer flag, panics if
