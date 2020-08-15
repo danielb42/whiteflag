@@ -1,10 +1,6 @@
 language: go
 
-dist: xenial
-go: 1.11.x
-
-env: 
-  - GO111MODULE=on
+go: 1.14.x
 
 install: 
   - go build -o test.bin ./test/
