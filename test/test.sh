@@ -13,6 +13,9 @@ function check {
 ./test.bin 
 check "no flags"
 
+./test.bin -a | grep -q "bool = true"
+check "bool set"
+
 ./test.bin -b | grep -q "bool = true"
 check "bool set"
 
@@ -55,7 +58,7 @@ check "short name too long"
 ./test.bin --testlongtooshort | grep -q "must be longer than 1 char"
 check "long name too short"
 
-./test.bin --testlongalreadyaliased | grep -q "already aliased to another flag"
+./test.bin --testlongalreadyaliased | grep -q "already aliased to another short flag"
 check "long flag already aliased"
 
 ./test.bin --testshortalreadyaliased | grep -q "already has an associated long flag"

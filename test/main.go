@@ -10,6 +10,12 @@ func main() {
 	wf.Alias("b", "bool", "An alias.")
 	wf.Alias("c", "cflag", "Another alias.")
 
+	// Unaliased short
+	if wf.CheckBool("a") {
+		fmt.Println("bool =", wf.GetBool("a"))
+	}
+
+	// Aliased short
 	if wf.CheckBool("b") {
 		fmt.Println("bool =", wf.GetBool("b"))
 	}
@@ -18,10 +24,12 @@ func main() {
 		fmt.Println("integer =", wf.GetInt("int"))
 	}
 
+	// Unaliased long
 	if wf.CheckString("string") {
 		fmt.Println("string =", wf.GetString("string"))
 	}
 
+	// Aliased long
 	if wf.CheckInt("cflag") {
 		fmt.Println("cflag =", wf.GetInt("cflag"))
 	}

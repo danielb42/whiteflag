@@ -24,7 +24,7 @@ func main() {
 	// followed by a string value. if so, print the given string value.
 	//
 	// ! we CheckString() first as GetString() on an absent value would
-	// ! trigger a panic (thus making it a required flag)
+	// ! trigger an error (thus making it mystring required flag)
 	//
 	if wf.CheckString("mystring") {
 		println(wf.GetString("mystring"))
@@ -33,7 +33,7 @@ func main() {
 	// if -x and -y are present and are followed by integer values, add their values.
 	//
 	// ! again, we CheckInt() first as GetInt() on an absent value would
-	// ! trigger a panic (thus making it a required flag)
+	// ! trigger an error (thus making x and y required flags)
 	//
 	if wf.CheckInt("x") && wf.CheckInt("y") {
 		x := wf.GetInt("x")
@@ -49,12 +49,14 @@ func main() {
 		println("integer flag --missing is not present on command line")
 	}
 
+	// vs.
+
 	if wf.CheckInt("missing") && wf.GetInt("missing") == 0 {
 		println("--missing has value 0")
 	}
 	//
-	// Note: Specifying --missing with an other-than-int value will consume --missing as a
-	// flag of that other type, thus CheckInt("missing") will still return false (not present).
+	// Note: Specifying --missing with a string value will consume --missing as a
+	// string type flag, thus CheckInt("missing") will still return false (not present).
 	// Same for specifying --missing alone, which would result in it being a bool flag.
 
 }

@@ -25,26 +25,26 @@ func init() {
 	aliases["h"] = flagAliasing{"help", "show this help text"}
 }
 
-// Alias associates one long flag with one short flag. Also, a description for that flag pair can be specified which
+// Alias associates one long flag to a short flag. Also, a description for that flag pair can be specified which
 // will be included in --help/-h output. All aliases must be declared before any Check or Get function is called.
 func Alias(short, long, description string) {
 	if short == "h" || long == "help" {
-		friendlyPanic("cannot re-define -h or --help")
+		friendlyPanic("cannot re-define builtin -h or --help")
 	}
 
 	if len(short) > 1 {
-		friendlyPanic("short flag aliased to --" + long + " must not be longer than 1 char")
+		friendlyPanic("short flag aliased to " + hyphenate(long) + " must not be longer than 1 char")
 	}
 
 	if len(long) < 2 {
-		friendlyPanic("long flag aliased to -" + short + " must be longer than 1 char")
+		friendlyPanic("long flag aliased to " + hyphenate(short) + " must be longer than 1 char")
 	}
 
 	if resolve(long) != long {
-		friendlyPanic(hyphenate(long) + " is already aliased to another flag")
+		friendlyPanic(hyphenate(long) + " is already aliased to another short flag")
 	}
 
-	if _, ok := aliases[short]; ok {
+	if _, present := aliases[short]; present {
 		friendlyPanic(hyphenate(short) + " already has an associated long flag")
 	}
 
@@ -52,17 +52,14 @@ func Alias(short, long, description string) {
 }
 
 func resolve(long string) string {
-	for short, flagDesc := range aliases {
-		if long == flagDesc.long {
+	for short, flagAliasing := range aliases {
+		if long == flagAliasing.long {
 			return short
 		}
 	}
 
 	return long
 }
-
-// ParseCommandLine is a no-op and only kept for backward compatibility.
-func ParseCommandLine() {}
 
 func parseCommandLine() {
 	if cliAlreadyParsed {
@@ -81,9 +78,8 @@ func parseCommandLine() {
 			continue
 		}
 
-		if len(aliases) > 0 && (token == "--help" || token == "-h") {
+		if token == "--help" || token == "-h" {
 			printUsage()
-			os.Exit(0)
 		}
 
 		if index < len(os.Args)-1 && !isFlag(os.Args[index+1]) {
@@ -147,8 +143,8 @@ func GetBool(flag string) bool {
 	return CheckBool(flag)
 }
 
-// GetInt fetches the value of an integer flag, panics if
-// flag is missing or no integer value is specified.
+// GetInt fetches the value of an integer flag, prints an error and exits
+// the program if flag is missing or no integer value is specified.
 func GetInt(flag string) int {
 	parseCommandLine()
 
@@ -159,8 +155,8 @@ func GetInt(flag string) int {
 	return flags["int"][resolve(flag)].(int)
 }
 
-// GetString fetches the value of a string flag, panics if
-// flag is missing or no string value is specified.
+// GetString fetches the value of an string flag, prints an error and exits
+// the program if flag is missing or no string value is specified.
 func GetString(flag string) string {
 	parseCommandLine()
 
@@ -204,4 +200,6 @@ func printUsage() {
 	for short, flagDesc := range aliases {
 		fmt.Printf("  %s  %s\t\t%s\n", hyphenate(short), hyphenate(flagDesc.long), flagDesc.description)
 	}
+
+	os.Exit(1)
 }
