@@ -1,7 +1,7 @@
 # whiteflag
 
-[![Build Status](https://travis-ci.com/danielb42/whiteflag.svg?branch=master)](https://travis-ci.com/danielb42/whiteflag)
-[![GoDoc](https://godoc.org/github.com/danielb42/whiteflag?status.svg)](https://godoc.org/github.com/danielb42/whiteflag) 
+![Tests](https://github.com/danielb42/whiteflag/workflows/Tests/badge.svg)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/danielb42/whiteflag)](https://pkg.go.dev/github.com/danielb42/whiteflag)
 [![Go Report Card](https://goreportcard.com/badge/github.com/danielb42/whiteflag)](https://goreportcard.com/report/github.com/danielb42/whiteflag) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 ![Whiteflag Gopher](whiteflag.png)
@@ -9,8 +9,7 @@
 A sane flag-package for people who just need some CLI flags in Golang projects, not command/argument/option-parsing frameworks for space ships. If you, too, waved a white flag on those, `whiteflag` is here to assist.
 
 ## What it does
-- provides a method `FlagPresent` to check for specified flags, and methods `Get(Bool|Int|String)` to access their values 
-(These methods can be utilized directly without further setup of each flag.) 
+- provides a method `FlagPresent` to check for specified flags, and methods `Get(Bool|Int|String)` to access their values (these methods can be utilized directly without further setup of each flag) 
 - allows you to distinguish between absent and zero-valued flags
 - `-h/--help` prints basic generated Usage/Help text (see examples)
 - Default values for flags can be specified
@@ -34,8 +33,7 @@ func main() {
 ```
 
 ### With long+required+default flags and nice 'Usage' output
-The next snippet will print the sum of two integers given through `-x` and `-y`.  
-Let's also associate long flags to the short flags so we could equivalently run the snippet with `--first` and `--second`. **Aliasing flags makes them known to the Usage/Help text generation.**  
+The next snippet will print the sum of two integers given through `-x` and `-y`. For `y` we specify a default value. Let's also associate long flags to the short flags so we could equivalently run the snippet with `--first` and `--second`. Aliasing flags makes them known to the Usage/Help text generation.
 
 ```golang
 package main
@@ -58,7 +56,7 @@ func main() {
 }
 ```
 
-Usage/Help text would be available through `-h/--help`:
+For the snippet above the following Usage/Help text would be available through `-h/--help`:
 
 ```
 Usage: ./example <flags>
