@@ -1,3 +1,3 @@
 module github.com/danielb42/whiteflag
 
-go 1.14
+go 1.15
