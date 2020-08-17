@@ -6,13 +6,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 ![Whiteflag Gopher](whiteflag.png)
 
-A minimal but sane flag-package for people who just need some CLI flags in Golang projects, not command/argument/option-parsing frameworks for space ships. If you, too, waved a white flag on those, whiteflag is here to assist.
+A sane flag-package for people who just need some CLI flags in Golang projects, not command/argument/option-parsing frameworks for space ships. If you, too, waved a white flag on those, `whiteflag` is here to assist.
 
 ## What it does
-- provides a `Check` and a `Get` method for Boolean, Integer and String type flags  
-These can be utilized directly without further setup of each flag. 
+- provides a method `FlagPresent` to check for specified flags, and methods `Get(Bool|Int|String)` to access their values 
+(These methods can be utilized directly without further setup of each flag.) 
 - allows you to distinguish between absent and zero-valued flags
 - `-h/--help` prints basic generated Usage/Help text (see [example](#with-long-flags))
+- Default values for flags can be specified
+- Required flags can be achieved implicitly (see example)
 
 ## Examples
 Please have a look at the comprehensive [example source file](example/example.go).  
@@ -25,7 +27,7 @@ package main
 import wf "github.com/danielb42/whiteflag"
 
 func main() {
-    if wf.CheckString("p") {
+    if wf.FlagPresent("p") {
         println(wf.GetString("p"))
     }
 }
@@ -45,9 +47,9 @@ func main() {
     wf.Alias("x", "first",  "The first number.")
     wf.Alias("y", "second", "The second number.")
 
-    // we don't CheckInt() for x und y before Get'ting them so 
-    // the program will exit if not both flags are specified,
-    // thus making them 'required' flags
+    // we don't do a FlagPresent() check on x und y before Get'ting them so 
+    // the program will exit if not both flags are specified, thus making 
+    // x and y 'required' flags
 
     x := wf.GetInt("x")
     y := wf.GetInt("y")

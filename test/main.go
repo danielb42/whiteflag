@@ -10,61 +10,83 @@ func main() {
 	wf.Alias("b", "bool", "An alias.")
 	wf.Alias("c", "cflag", "Another alias.")
 
+	wf.SetIntDefault("defint", 123)
+	wf.SetStringDefault("defstr", "foobar")
+
+	if wf.FlagPresent("testdefaults") {
+		fmt.Println("defint =", wf.GetInt("defint"))
+		fmt.Println("defstr =", wf.GetString("defstr"))
+	}
+
+	if wf.FlagPresent("testrequired") {
+		wf.GetInt("required")
+	}
+
 	// Unaliased short
-	if wf.CheckBool("a") {
+	if wf.FlagPresent("a") {
 		fmt.Println("bool =", wf.GetBool("a"))
 	}
 
 	// Aliased short
-	if wf.CheckBool("b") {
+	if wf.FlagPresent("b") {
 		fmt.Println("bool =", wf.GetBool("b"))
 	}
 
-	if wf.CheckInt("int") {
+	if wf.FlagPresent("int") {
 		fmt.Println("integer =", wf.GetInt("int"))
 	}
 
 	// Unaliased long
-	if wf.CheckString("string") {
+	if wf.FlagPresent("string") {
 		fmt.Println("string =", wf.GetString("string"))
 	}
 
 	// Aliased long
-	if wf.CheckInt("cflag") {
+	if wf.FlagPresent("cflag") {
 		fmt.Println("cflag =", wf.GetInt("cflag"))
 	}
 
-	if wf.CheckString("notint") {
+	if wf.FlagPresent("notint") {
 		wf.GetInt("notint")
 	}
 
-	if wf.CheckBool("notstring") {
+	if wf.FlagPresent("notstring") {
 		wf.GetString("notstring")
 	}
 
-	if wf.CheckBool("testredefineh") {
+	if wf.FlagPresent("testredefineh") {
 		wf.Alias("h", "x", "y")
 	}
 
-	if wf.CheckBool("testredefinehelp") {
+	if wf.FlagPresent("testredefinehelp") {
 		wf.Alias("x", "help", "y")
 	}
 
-	if wf.CheckBool("testshorttoolong") {
+	if wf.FlagPresent("testshorttoolong") {
 		wf.Alias("xy", "xy", "xy")
 	}
 
-	if wf.CheckBool("testlongtooshort") {
+	if wf.FlagPresent("testlongtooshort") {
 		wf.Alias("x", "y", "z")
 	}
 
-	if wf.CheckBool("testlongalreadyaliased") {
+	if wf.FlagPresent("testlongalreadyaliased") {
 		wf.Alias("x", "xx", "z")
 		wf.Alias("y", "xx", "z")
 	}
 
-	if wf.CheckBool("testshortalreadyaliased") {
+	if wf.FlagPresent("testshortalreadyaliased") {
 		wf.Alias("x", "xx", "z")
 		wf.Alias("x", "yy", "z")
+	}
+
+	// same type
+	if wf.FlagPresent("testdefaultalreadyset1") {
+		wf.SetIntDefault("defint", 456)
+	}
+
+	// across types
+	if wf.FlagPresent("testdefaultalreadyset2") {
+		wf.SetStringDefault("defint", "barfoo")
 	}
 }

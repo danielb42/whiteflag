@@ -6,57 +6,65 @@ import (
 
 func main() {
 
-	// optional - associate long flags with short flags and supply
+	// optionally associate long flags with short flags and supply
 	// a description which will be included in -h/--help output.
 	//
-	// ! aliasing must happen before calling any Get or Check function
+	// ! aliasing must happen before any call to FlagPresent(), GetBool(), GetInt() or GetString()
 	//
 	wf.Alias("b", "mybool", "This is a flag.")
 	wf.Alias("s", "mystring", "A string to print.")
 
 	// check if a boolean flag -b or --mybool (as aliased above) is specified (=true).
 	//
-	if wf.CheckBool("mybool") {
+	if wf.FlagPresent("mybool") {
 		println("The bool flag is set")
 	}
 
-	// check if -s or --mystring (as aliased above) is present and is
-	// followed by a string value. if so, print the given string value.
+	// check if -s or --mystring (as aliased above) is present. if so, print its string value. Errors
+	// and quits if mystring value is not a string.
 	//
-	// ! we CheckString() first as GetString() on an absent value would
-	// ! trigger an error (thus making it mystring required flag)
+	// ! we check FlagPresent() first as GetString() on an absent value would
+	// ! trigger an error (thus making mystring a required flag)
 	//
-	if wf.CheckString("mystring") {
+	if wf.FlagPresent("mystring") {
 		println(wf.GetString("mystring"))
 	}
 
-	// if -x and -y are present and are followed by integer values, add their values.
+	// if -x and -y are present, add their values. Errors and quits if x or y values are not integers.
 	//
-	// ! again, we CheckInt() first as GetInt() on an absent value would
+	// ! again, we check FlagPresent() first as GetInt() on an absent value would
 	// ! trigger an error (thus making x and y required flags)
 	//
-	if wf.CheckInt("x") && wf.CheckInt("y") {
+	if wf.FlagPresent("x") && wf.FlagPresent("y") {
 		x := wf.GetInt("x")
 		y := wf.GetInt("y")
 		sum := x + y
 		println("sum of x and y:", sum)
 	}
 
+	// optionally assign default values for flags
+	//
+	// ! defaults must be set before any call to FlagPresent(), GetBool(), GetInt() or GetString()
+	//
+	wf.SetIntDefault("x", 2)
+	wf.SetIntDefault("y", 3)
+	x := wf.GetInt("x") // does not trigger an error now if x is not specified on command line
+	y := wf.GetInt("y") // does not trigger an error now if y is not specified on command line
+	sum := x + y
+	println("sum of x and y:", sum)
+
 	// you can check if an int/string flag is explicitly holding its types' zero value (0/"")
 	// or if the flag is completely absent from the command line.
 	//
-	if !wf.CheckInt("missing") {
+	if !wf.FlagPresent("missing") {
 		println("integer flag --missing is not present on command line")
 	}
-
 	// vs.
-
-	if wf.CheckInt("missing") && wf.GetInt("missing") == 0 {
+	if wf.FlagPresent("missing") && wf.GetInt("missing") == 0 {
 		println("--missing has value 0")
 	}
-	//
-	// Note: Specifying --missing with a string value will consume --missing as a
-	// string type flag, thus CheckInt("missing") will still return false (not present).
-	// Same for specifying --missing alone, which would result in it being a bool flag.
-
+	// and
+	if wf.FlagPresent("missing") && len(wf.GetString("missing")) == 0 {
+		println("--missing holds the empty string")
+	}
 }

@@ -13,8 +13,10 @@ type flagAliasing struct {
 
 var (
 	cliAlreadyParsed bool
-	flags            = make(map[string]map[string]interface{})
-	aliases          = make(map[string]flagAliasing)
+
+	flags    = make(map[string]map[string]interface{})
+	defaults = make(map[string]map[string]interface{})
+	aliases  = make(map[string]flagAliasing)
 )
 
 func init() {
@@ -22,33 +24,11 @@ func init() {
 	flags["int"] = make(map[string]interface{})
 	flags["string"] = make(map[string]interface{})
 
+	defaults["bool"] = make(map[string]interface{})
+	defaults["int"] = make(map[string]interface{})
+	defaults["string"] = make(map[string]interface{})
+
 	aliases["h"] = flagAliasing{"help", "show this help text"}
-}
-
-// Alias associates one long flag to a short flag. Also, a description for that flag pair can be specified which
-// will be included in --help/-h output. All aliases must be declared before any Check or Get function is called.
-func Alias(short, long, description string) {
-	if short == "h" || long == "help" {
-		friendlyPanic("cannot re-define builtin -h or --help")
-	}
-
-	if len(short) > 1 {
-		friendlyPanic("short flag aliased to " + hyphenate(long) + " must not be longer than 1 char")
-	}
-
-	if len(long) < 2 {
-		friendlyPanic("long flag aliased to " + hyphenate(short) + " must be longer than 1 char")
-	}
-
-	if resolve(long) != long {
-		friendlyPanic(hyphenate(long) + " is already aliased to another short flag")
-	}
-
-	if _, present := aliases[short]; present {
-		friendlyPanic(hyphenate(short) + " already has an associated long flag")
-	}
-
-	aliases[short] = flagAliasing{long, description}
 }
 
 func resolve(long string) string {
@@ -98,7 +78,7 @@ func parseCommandLine() {
 			}
 		}
 
-		if CheckBool(flag) || CheckInt(flag) || CheckString(flag) {
+		if FlagPresent(flag) {
 			friendlyPanic(hyphenate(flag) + " specified more than once")
 		}
 
@@ -113,58 +93,6 @@ func parseCommandLine() {
 			}
 		}
 	}
-}
-
-// CheckBool returns true when flag is present on the command line.
-func CheckBool(flag string) bool {
-	parseCommandLine()
-	_, present := flags["bool"][resolve(flag)]
-	return present
-}
-
-// CheckInt returns true when flag is present on the command line and
-// is followed by an integer value.
-func CheckInt(flag string) bool {
-	parseCommandLine()
-	_, present := flags["int"][resolve(flag)]
-	return present
-}
-
-// CheckString returns true when flag is present on the command line and
-// is followed by a string value.
-func CheckString(flag string) bool {
-	parseCommandLine()
-	_, present := flags["string"][resolve(flag)]
-	return present
-}
-
-// GetBool is equivalent to CheckBool()
-func GetBool(flag string) bool {
-	return CheckBool(flag)
-}
-
-// GetInt fetches the value of an integer flag, prints an error and exits
-// the program if flag is missing or no integer value is specified.
-func GetInt(flag string) int {
-	parseCommandLine()
-
-	if !CheckInt(flag) {
-		friendlyPanic("integer flag " + hyphenate(flag) + " missing or no integer value given")
-	}
-
-	return flags["int"][resolve(flag)].(int)
-}
-
-// GetString fetches the value of an string flag, prints an error and exits
-// the program if flag is missing or no string value is specified.
-func GetString(flag string) string {
-	parseCommandLine()
-
-	if !CheckString(flag) {
-		friendlyPanic("string flag " + hyphenate(flag) + " missing or no string value given")
-	}
-
-	return flags["string"][resolve(flag)].(string)
 }
 
 func hyphenate(flag string) string {

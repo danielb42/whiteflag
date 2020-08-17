@@ -13,11 +13,26 @@ function check {
 ./test.bin 
 check "no flags"
 
+./test.bin --testdefaults | grep -q "defint = 123"
+check "default int"
+
+./test.bin --testdefaults | grep -q "defstr = foobar"
+check "default str"
+
+./test.bin --testdefaultalreadyset1 | grep -q "default value for --defint already set"
+check "default value already set"
+
+./test.bin --testdefaultalreadyset2 | grep -q "default value for --defint already set"
+check "default value already set (across types)"
+
+./test.bin --testrequired | grep -q "integer flag --required missing or no integer value given"
+check "missing required param"
+
 ./test.bin -a | grep -q "bool = true"
-check "bool set"
+check "unaliased short set"
 
 ./test.bin -b | grep -q "bool = true"
-check "bool set"
+check "aliased short set"
 
 ./test.bin --int 42 | grep -q "integer = 42"
 check "integer = 42"
