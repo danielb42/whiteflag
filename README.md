@@ -1,10 +1,12 @@
 # whiteflag
 
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/danielb42/whiteflag)
 ![Tests](https://github.com/danielb42/whiteflag/workflows/Tests/badge.svg)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/danielb42/whiteflag)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/danielb42/whiteflag)](https://pkg.go.dev/github.com/danielb42/whiteflag)
 [![Go Report Card](https://goreportcard.com/badge/github.com/danielb42/whiteflag)](https://goreportcard.com/report/github.com/danielb42/whiteflag)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
-![Whiteflag Gopher](whiteflag.png)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)  
+![Whiteflag Gopher](https://raw.githubusercontent.com/danielb42/whiteflag/master/whiteflag.png)
 
 A sane flag-package for gophers who just need some CLI flags in Golang projects, not command-structuring frameworks for space ships. If you waved a white flag on the usual whoppers, `whiteflag` is here to assist.
 
