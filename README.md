@@ -2,24 +2,28 @@
 
 ![Tests](https://github.com/danielb42/whiteflag/workflows/Tests/badge.svg)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/danielb42/whiteflag)](https://pkg.go.dev/github.com/danielb42/whiteflag)
-[![Go Report Card](https://goreportcard.com/badge/github.com/danielb42/whiteflag)](https://goreportcard.com/report/github.com/danielb42/whiteflag) 
+[![Go Report Card](https://goreportcard.com/badge/github.com/danielb42/whiteflag)](https://goreportcard.com/report/github.com/danielb42/whiteflag)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 ![Whiteflag Gopher](whiteflag.png)
 
-A sane flag-package for people who just need some CLI flags in Golang projects, not command/argument/option-parsing frameworks for space ships. If you, too, waved a white flag on those, `whiteflag` is here to assist.
+A sane flag-package for gophers who just need some CLI flags in Golang projects, not command-structuring frameworks for space ships. If you waved a white flag on the usual whoppers, `whiteflag` is here to assist.
 
-## What it does
-- provides a method `FlagPresent` to check for specified flags, and methods `Get(Bool|Int|String)` to access their values (these methods can be utilized directly without further setup of each flag) 
+## Features
+
+- provides a method `FlagPresent` to check for specified flags, and methods `Get(Bool|Int|String)` to access their values (these methods can be utilized directly without further setup of each flag)
 - allows you to distinguish between absent and zero-valued flags
 - `-h/--help` prints basic generated Usage/Help text (see examples)
 - Default values for flags can be specified
 - Required flags can be achieved implicitly (see examples)
 
 ## Examples
+
 Please have a look at the comprehensive [example source file](example/example.go).  
 
 ### Basic
+
 The following snippet would print "gopher" when called with `-p gopher`.
+
 ```golang
 package main
 
@@ -33,6 +37,7 @@ func main() {
 ```
 
 ### With long+required+default flags and nice 'Usage' output
+
 The next snippet will print the sum of two integers given through `-x` and `-y`. For `y` we specify a default value. Let's also associate long flags to the short flags so we could equivalently run the snippet with `--first` and `--second`. Aliasing flags makes them known to the Usage/Help text generation.
 
 ```golang
@@ -45,7 +50,7 @@ func main() {
     wf.Alias("y", "second", "The second number.")
     wf.SetIntDefault("y", 42)
 
-    // we don't do a FlagPresent() check on x und y before Get'ting them so 
+    // we don't do a FlagPresent() check on x und y before Get'ting them so
     // the program will exit if x is not specified, thus making x 'required'.
     // For a missing y flag, the default value of 42 would be used.
 
@@ -58,7 +63,7 @@ func main() {
 
 For the snippet above the following Usage/Help text would be available through `-h/--help`:
 
-```
+```golang
 Usage: ./example <flags>
 
 Flags:
@@ -67,4 +72,5 @@ Flags:
 ```
 
 ## License
+
 MIT
