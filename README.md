@@ -12,9 +12,9 @@ A sane flag-package for people who just need some CLI flags in Golang projects, 
 - provides a method `FlagPresent` to check for specified flags, and methods `Get(Bool|Int|String)` to access their values 
 (These methods can be utilized directly without further setup of each flag.) 
 - allows you to distinguish between absent and zero-valued flags
-- `-h/--help` prints basic generated Usage/Help text (see [example](#with-long-flags))
+- `-h/--help` prints basic generated Usage/Help text (see examples)
 - Default values for flags can be specified
-- Required flags can be achieved implicitly (see example)
+- Required flags can be achieved implicitly (see examples)
 
 ## Examples
 Please have a look at the comprehensive [example source file](example/example.go).  
@@ -33,10 +33,9 @@ func main() {
 }
 ```
 
-### With long, required flags and 'Usage' output
+### With long+required+default flags and nice 'Usage' output
 The next snippet will print the sum of two integers given through `-x` and `-y`.  
-Let's also associate long flags to the short flags so we could equivalently run the snippet with `--first` and `--second`.  
-**Aliasing flags makes them known to the Usage/Help text generation.**  
+Let's also associate long flags to the short flags so we could equivalently run the snippet with `--first` and `--second`. **Aliasing flags makes them known to the Usage/Help text generation.**  
 
 ```golang
 package main
@@ -46,10 +45,11 @@ import wf "github.com/danielb42/whiteflag"
 func main() {
     wf.Alias("x", "first",  "The first number.")
     wf.Alias("y", "second", "The second number.")
+    wf.SetIntDefault("y", 42)
 
     // we don't do a FlagPresent() check on x und y before Get'ting them so 
-    // the program will exit if not both flags are specified, thus making 
-    // x and y 'required' flags
+    // the program will exit if x is not specified, thus making x 'required'.
+    // For a missing y flag, the default value of 42 would be used.
 
     x := wf.GetInt("x")
     y := wf.GetInt("y")
