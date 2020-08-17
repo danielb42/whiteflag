@@ -1,18 +1,19 @@
 # whiteflag
 
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/danielb42/whiteflag)
 ![Tests](https://github.com/danielb42/whiteflag/workflows/Tests/badge.svg)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/danielb42/whiteflag)
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/danielb42/whiteflag)
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/danielb42/whiteflag)](https://pkg.go.dev/github.com/danielb42/whiteflag)
 [![Go Report Card](https://goreportcard.com/badge/github.com/danielb42/whiteflag)](https://goreportcard.com/report/github.com/danielb42/whiteflag)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)  
+
 ![Whiteflag Gopher](https://raw.githubusercontent.com/danielb42/whiteflag/master/whiteflag.png)
 
 A sane flag-package for gophers who just need some CLI flags in Golang projects, not command-structuring frameworks for space ships. If you waved a white flag on the usual whoppers, `whiteflag` is here to assist.
 
 ## Features
 
-- provides a method `FlagPresent` to check for specified flags, and methods `Get(Bool|Int|String)` to access their values (these methods can be utilized directly without further setup of each flag)
+- simply provides `FlagPresent()` to check for specified flags, and `GetBool|Int|String()` to access their values (these functions can be utilized directly without further setup of each flag)
 - allows you to distinguish between absent and zero-valued flags
 - `-h/--help` prints basic generated Usage/Help text (see examples)
 - Default values for flags can be specified
