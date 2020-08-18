@@ -26,9 +26,17 @@ func GetString(flag string) string {
 	return value
 }
 
-// GetBool is equivalent to FlagPresent() on a bool flag name.
+// GetBool checks if flag is present on the command line. It prints an error and exits
+// the program if flag is not used in a boolean context (i.e. is followed by a value).
 func GetBool(flag string) bool {
-	return FlagPresent(flag)
+
+	value, isBool := getValueOf(flag).(bool)
+
+	if !isBool {
+		friendlyPanic("flag " + hyphenate(flag) + " is followed by a non-bool value")
+	}
+
+	return value
 }
 
 func getValueOf(flag string) interface{} {

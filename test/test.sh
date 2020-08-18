@@ -29,10 +29,13 @@ check "default value already set (across types)"
 check "missing required param"
 
 ./test.bin -a | grep -q "bool = true"
-check "unaliased short set"
+check "unaliased short bool set"
 
 ./test.bin -b | grep -q "bool = true"
-check "aliased short set"
+check "aliased short bool set"
+
+./test.bin --bool notbool | grep -q "followed by a non-bool value"
+check "bool in non-bool context recognized"
 
 ./test.bin --int 42 | grep -q "integer = 42"
 check "integer = 42"
