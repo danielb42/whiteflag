@@ -24,7 +24,6 @@ func init() {
 	flags["int"] = make(map[string]interface{})
 	flags["string"] = make(map[string]interface{})
 
-	defaults["bool"] = make(map[string]interface{})
 	defaults["int"] = make(map[string]interface{})
 	defaults["string"] = make(map[string]interface{})
 
