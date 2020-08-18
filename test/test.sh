@@ -34,6 +34,9 @@ check "unaliased short bool set"
 ./test.bin -b | grep -q "bool = true"
 check "aliased short bool set"
 
+./test.bin --testboolfalse | grep -q "bool = false"
+check "absent bool param = false"
+
 ./test.bin --bool notbool | grep -q "followed by a non-bool value"
 check "bool in non-bool context recognized"
 

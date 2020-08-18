@@ -32,6 +32,10 @@ func main() {
 		fmt.Println("bool =", wf.GetBool("b"))
 	}
 
+	if wf.FlagPresent("testboolfalse") {
+		fmt.Println("bool =", wf.GetBool("foobarfoobar"))
+	}
+
 	if wf.FlagPresent("int") {
 		fmt.Println("integer =", wf.GetInt("int"))
 	}

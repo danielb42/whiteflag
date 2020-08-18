@@ -30,13 +30,19 @@ func GetString(flag string) string {
 // the program if flag is not used in a boolean context (i.e. is followed by a value).
 func GetBool(flag string) bool {
 
-	value, isBool := getValueOf(flag).(bool)
+	value := getValueOf(flag)
+
+	if value == nil {
+		return false
+	}
+
+	_, isBool := value.(bool)
 
 	if !isBool {
 		friendlyPanic("flag " + hyphenate(flag) + " is followed by a non-bool value")
 	}
 
-	return value
+	return true
 }
 
 func getValueOf(flag string) interface{} {
