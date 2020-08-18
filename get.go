@@ -36,9 +36,7 @@ func GetBool(flag string) bool {
 		return false
 	}
 
-	_, isBool := value.(bool)
-
-	if !isBool {
+	if _, isBool := value.(bool); !isBool {
 		friendlyPanic("flag " + hyphenate(flag) + " is followed by a non-bool value")
 	}
 
