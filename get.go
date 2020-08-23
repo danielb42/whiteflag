@@ -43,7 +43,7 @@ func GetBool(flag string) bool {
 	return true
 }
 
-func getValueOf(flag string) interface{} {
+func getValueOf(flag string) any {
 
 	parseCommandLine()
 

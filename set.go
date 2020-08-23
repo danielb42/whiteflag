@@ -41,7 +41,7 @@ func SetStringDefault(flag, value string) {
 	setDefault(flag, value)
 }
 
-func setDefault(flag string, value interface{}) {
+func setDefault(flag string, value any) {
 	if checkDefaults(flag) {
 		friendlyPanic("default value for " + hyphenate(flag) + " already set")
 	}

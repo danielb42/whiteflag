@@ -11,21 +11,23 @@ type flagAliasing struct {
 	description string
 }
 
+type any interface{}
+
 var (
 	cliAlreadyParsed bool
 
-	flags    = make(map[string]map[string]interface{})
-	defaults = make(map[string]map[string]interface{})
+	flags    = make(map[string]map[string]any)
+	defaults = make(map[string]map[string]any)
 	aliases  = make(map[string]flagAliasing)
 )
 
 func init() {
-	flags["bool"] = make(map[string]interface{})
-	flags["int"] = make(map[string]interface{})
-	flags["string"] = make(map[string]interface{})
+	flags["bool"] = make(map[string]any)
+	flags["int"] = make(map[string]any)
+	flags["string"] = make(map[string]any)
 
-	defaults["int"] = make(map[string]interface{})
-	defaults["string"] = make(map[string]interface{})
+	defaults["int"] = make(map[string]any)
+	defaults["string"] = make(map[string]any)
 
 	aliases["h"] = flagAliasing{"help", "show this help text"}
 }
@@ -49,7 +51,7 @@ func parseCommandLine() {
 
 	var (
 		flag  string
-		value interface{}
+		value any
 	)
 
 	for index, token := range os.Args {
