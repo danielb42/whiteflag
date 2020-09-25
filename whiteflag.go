@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"text/tabwriter"
 )
 
 type flagAliasing struct {
@@ -126,9 +127,12 @@ func friendlyPanic(reason string) {
 func printUsage() {
 	fmt.Printf("Usage: %s <flags>\n\nFlags:\n", os.Args[0])
 
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
+
 	for short, flagDesc := range aliases {
-		fmt.Printf("  %s  %s\t\t%s\n", hyphenate(short), hyphenate(flagDesc.long), flagDesc.description)
+		fmt.Fprintf(w, "  %s  %s  \t%s\n", hyphenate(short), hyphenate(flagDesc.long), flagDesc.description)
 	}
 
-	os.Exit(1)
+	w.Flush()
+	os.Exit(2)
 }
