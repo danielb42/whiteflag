@@ -9,6 +9,9 @@ import (
 func main() {
 	wf.Alias("b", "bool", "An alias.")
 	wf.Alias("c", "cflag", "Another alias.")
+	wf.Alias("d", "emptydesc1", "")
+	wf.Alias("e", "emptydesc2", " ")
+	wf.Alias("f", "emptydesc3", "  ")
 
 	wf.SetIntDefault("defint", 123)
 	wf.SetStringDefault("defstr", "foobar")
@@ -82,6 +85,22 @@ func main() {
 	if wf.FlagPresent("testshortalreadyaliased") {
 		wf.Alias("x", "xx", "z")
 		wf.Alias("x", "yy", "z")
+	}
+
+	if wf.FlagPresent("testemptyaliasfields1") {
+		wf.Alias("", "foobar", "foobar")
+	}
+
+	if wf.FlagPresent("testemptyaliasfields2") {
+		wf.Alias("f", "", "foobar")
+	}
+
+	if wf.FlagPresent("testemptyaliasfields3") {
+		wf.Alias("f", " ", "foobar")
+	}
+
+	if wf.FlagPresent("testemptyaliasfields4") {
+		wf.Alias("f", "  ", "foobar")
 	}
 
 	// same type

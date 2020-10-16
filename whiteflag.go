@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"text/tabwriter"
 )
 
@@ -117,6 +118,10 @@ func isShortFlag(token string) bool {
 
 func isFlag(token string) bool {
 	return isLongFlag(token) || isShortFlag(token)
+}
+
+func isSpacesOnly(str string) bool {
+	return len(strings.TrimSpace(str)) == 0
 }
 
 func friendlyPanic(reason string) {

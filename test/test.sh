@@ -58,7 +58,7 @@ check "type mismatch recognized (1)"
 ./test.bin --notstring | grep -q "string flag --notstring missing or no string value given"
 check "type mismatch recognized (2)"
 
-./test.bin --help | egrep "Usage|bool|Another" | wc -l | grep -q 3
+./test.bin --help | egrep "Usage|bool|Another|emptydesc" | wc -l | grep -q 6
 check "usage text looks complete"
 
 ./test.bin -a -b -a | grep -q "\-a specified more than once"
@@ -84,6 +84,18 @@ check "long flag already aliased"
 
 ./test.bin --testshortalreadyaliased | grep -q "already has an associated long flag"
 check "short flag already aliased"
+
+./test.bin --testemptyaliasfields1 | grep -q "short flag aliased to --foobar must not be empty"
+check "tried to alias empty short flag"
+
+./test.bin --testemptyaliasfields2 | grep -q "long flag aliased to -f must not be empty"
+check "tried to alias empty long flag"
+
+./test.bin --testemptyaliasfields3 | grep -q "long flag aliased to -f must not be empty"
+check "tried to alias empty (space) long flag"
+
+./test.bin --testemptyaliasfields4 | grep -q "long flag aliased to -f must not be empty"
+check "tried to alias empty (spaces) long flag"
 
 echo "============="
 echo "OK: all tests"

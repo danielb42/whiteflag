@@ -10,6 +10,14 @@ func Alias(short, long, description string) {
 		friendlyPanic("cannot re-define builtin -h or --help")
 	}
 
+	if len(short) == 0 || isSpacesOnly(short) {
+		friendlyPanic("short flag aliased to " + hyphenate(long) + " must not be empty")
+	}
+
+	if len(long) == 0 || isSpacesOnly(long) {
+		friendlyPanic("long flag aliased to " + hyphenate(short) + " must not be empty")
+	}
+
 	if len(short) > 1 {
 		friendlyPanic("short flag aliased to " + hyphenate(long) + " must not be longer than 1 char")
 	}
